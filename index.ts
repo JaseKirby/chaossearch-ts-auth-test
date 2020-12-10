@@ -6,16 +6,20 @@ const accessKeyId = process.env.CS_API_KEY_ID || '';
 const secretAccessKey = process.env.CS_API_SECRET_KEY || '';
 const bucketName = process.env.CS_BUCKET || '';
 
-csV1(host, accessKeyId, secretAccessKey);
-console.log('=====================csV1-end=============================\n\n\n');
+csV1(host, accessKeyId, secretAccessKey).then(() => {
+    console.log('=====================csV1-end=============================\n\n\n');
+});
 
-csBucketMetadata(host, accessKeyId, secretAccessKey, bucketName);
-console.log('=====================csBucketMetadata-end=================\n\n\n');
+csBucketMetadata(host, accessKeyId, secretAccessKey, bucketName).then(() => {
+    console.log('=====================csBucketMetadata-end=================\n\n\n');
+});
 
-csObjGroup(host, accessKeyId, secretAccessKey, bucketName);
-console.log('=====================csObjGroup-end=======================\n\n\n');
 
-export function csV1(host: string, accessKeyId: string, secretAccessKey: string) {
+csObjGroup(host, accessKeyId, secretAccessKey, bucketName).then(() => {
+    console.log('=====================csObjGroup-end=======================\n\n\n');
+});
+
+export async function csV1(host: string, accessKeyId: string, secretAccessKey: string) {
     const reqOpts = aws4.sign({
         host: 'blackboard-us-east-1.chaossearch.io',
         service: 's3',
@@ -28,20 +32,18 @@ export function csV1(host: string, accessKeyId: string, secretAccessKey: string)
 
     console.log(reqOpts);
 
-    const resp = axios.request({
+    const resp = await axios.request({
         url: `https://${host}/V1/`,
         method: 'GET',
         headers: reqOpts.headers
-    });
-
-    resp.then((res) => {
-        console.log(res);
     }).catch((err) => {
         console.error(err);
     });
+
+    console.log(resp);
 }
 
-export function csBucketMetadata(host: string, accessKeyId: string, secretAccessKey: string, bucketName: string) {
+export async function csBucketMetadata(host: string, accessKeyId: string, secretAccessKey: string, bucketName: string) {
     const reqOpts = aws4.sign({
         host: host,
         service: 's3',
@@ -54,25 +56,21 @@ export function csBucketMetadata(host: string, accessKeyId: string, secretAccess
 
     console.log(reqOpts);
 
-    const resp = axios.request({
+    const resp = await axios.request({
         url: `https://${host}/Bucket/metadata/`,
         method: 'POST',
         headers: reqOpts.headers,
         data: {
             BucketName: bucketName
         }
-    });
-
-    resp.then((res) => {
-        console.log(res);
     }).catch((err) => {
         console.error(err);
-    });
+    });;
+
+    console.log(resp);
 }
 
-csBucketMetadata(host, accessKeyId, secretAccessKey, bucketName);
-
-export function csObjGroup(host: string, accessKeyId: string, secretAccessKey: string, bucketName: string) {
+export async function csObjGroup(host: string, accessKeyId: string, secretAccessKey: string, bucketName: string) {
     const csObjGroup = {
         bucket: `${bucketName}-int-test`,
         source: bucketName,
@@ -101,16 +99,14 @@ export function csObjGroup(host: string, accessKeyId: string, secretAccessKey: s
 
     console.log(reqOpts);
 
-    const resp = axios.request({
+    const resp = await axios.request({
         url: `https://${host}/Bucket/createObjectGroup/`,
         method: 'POST',
         headers: reqOpts.headers,
         data: csObjGroup
-    });
-
-    resp.then((res) => {
-        console.log(res);
     }).catch((err) => {
         console.error(err);
-    });
+    });;
+
+    console.log(resp);
 }
