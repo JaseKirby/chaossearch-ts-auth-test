@@ -21,7 +21,7 @@ csObjGroup(host, accessKeyId, secretAccessKey, bucketName).then(() => {
 
 export async function csV1(host: string, accessKeyId: string, secretAccessKey: string) {
     const reqOpts = aws4.sign({
-        host: 'blackboard-us-east-1.chaossearch.io',
+        host: host,
         service: 's3',
         region: 'us-east-1',
         path: '/V1/'
