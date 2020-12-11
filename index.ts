@@ -48,6 +48,7 @@ export async function csBucketMetadata(host: string, accessKeyId: string, secret
         host: host,
         service: 's3',
         region: 'us-east-1',
+        method: 'POST',
         path: '/Bucket/metadata/'
     }, {
         accessKeyId: accessKeyId,
@@ -91,6 +92,7 @@ export async function csObjGroup(host: string, accessKeyId: string, secretAccess
         host: host,
         service: 's3',
         region: 'us-east-1',
+        method: 'POST',
         path: '/Bucket/createObjectGroup/'
     }, {
         secretAccessKey: secretAccessKey,
